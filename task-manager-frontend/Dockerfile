@@ -1,8 +1,12 @@
-FROM node:20-alpine
-WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build
-RUN npm install -g serve
-EXPOSE 4173
-CMD ["serve","-s","dist","-l","4173"]
+# --- Stage 1: Build app ---
+    FROM node:20-alpine as build
+    WORKDIR /app
+    COPY . .
+    RUN npm install && npm run build
+    
+    # --- Stage 2: Serve with nginx ---
+    FROM nginx:alpine
+    COPY --from=build /app/dist /usr/share/nginx/html
+    EXPOSE 3000
+    CMD ["nginx", "-g", "daemon off;"]
+    

@@ -1,0 +1,30 @@
+- name: Deploy Task Manager App Locally
+  hosts: webserver
+  become: true
+  tasks:
+    - name: Start MySQL
+      docker_container:
+        name: mysql
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: taskdb
+        state: started
+        ports:
+          - "3306:3306"
+
+    - name: Start Backend
+      docker_container:
+        name: backend
+        image: abhishekkumar/task-manager-backend:latest
+        state: started
+        ports:
+          - "9090:8080"
+
+    - name: Start Frontend
+      docker_container:
+        name: frontend
+        image: abhishekkumar/task-manager-frontend:latest
+        state: started
+        ports:
+          - "3000:80"

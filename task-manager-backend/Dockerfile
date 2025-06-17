@@ -1,6 +1,13 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY . .
-RUN ./mvnw package -DskipTests
-EXPOSE 8080
-CMD ["java","-jar","target/task-manager-backend-1.0.0.jar"]
+# --- Stage 1: Build the JAR ---
+    FROM openjdk:17-jdk-slim as build
+    WORKDIR /app
+    COPY . .
+    RUN ./mvnw package -DskipTests
+    
+    # --- Stage 2: Run the JAR ---
+    FROM openjdk:17-jdk-slim
+    WORKDIR /app
+    COPY --from=build /app/target/task-manager-backend-1.0.0.jar app.jar
+    EXPOSE 9090
+    CMD ["java", "-jar", "app.jar"]
+    
