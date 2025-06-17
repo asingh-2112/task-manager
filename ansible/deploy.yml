@@ -2,7 +2,7 @@
   hosts: webserver
   become: true
   tasks:
-    - name: Start MySQL
+    - name: Start MySQL container
       docker_container:
         name: mysql
         image: mysql:8
@@ -12,19 +12,22 @@
         state: started
         ports:
           - "3306:3306"
+        restart_policy: unless-stopped
 
-    - name: Start Backend
+    - name: Start Backend container
       docker_container:
         name: backend
-        image: abhishekkumar/task-manager-backend:latest
+        image: asingh2112/task-manager-backend:latest
         state: started
         ports:
           - "9090:8080"
+        restart_policy: unless-stopped
 
-    - name: Start Frontend
+    - name: Start Frontend container
       docker_container:
         name: frontend
-        image: abhishekkumar/task-manager-frontend:latest
+        image: asingh2112/task-manager-frontend:latest
         state: started
         ports:
           - "3000:80"
+        restart_policy: unless-stopped
