@@ -7,7 +7,7 @@
     # --- Stage 2: Run the JAR ---
     FROM openjdk:17-jdk-slim
     WORKDIR /app
-    COPY --from=build /app/target/task-manager-backend-1.0.0.jar app.jar
+    COPY --from=build /app/target/task-manager-backend-0.0.1-SNAPSHOT.jar /app.jar
     EXPOSE 9090
     CMD ["java", "-jar", "app.jar"]
     
