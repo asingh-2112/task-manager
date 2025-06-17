@@ -17,7 +17,7 @@ pipeline {
 
         stage('Build Backend JAR') {
             steps {
-                dir('backend') {
+                dir('task-manager-backend') {
                     sh './mvnw clean package -DskipTests'
                 }
             }
