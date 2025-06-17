@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/asingh-2112/task-manager.git'
+                git branch: 'main', url: 'https://github.com/asingh-2112/task-manager.git'
             }
         }
 
