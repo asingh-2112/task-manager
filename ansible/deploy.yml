@@ -1,7 +1,14 @@
+---
 - name: Deploy Task Manager App Locally
-  hosts: webserver
-  become: true
+  hosts: localhost
+  become: false
   tasks:
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+      ignore_errors: true  # in case service module fails on some OSes
+
     - name: Start MySQL container
       docker_container:
         name: mysql
@@ -10,24 +17,24 @@
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: taskdb
         state: started
+        restart_policy: unless-stopped
         ports:
           - "3306:3306"
-        restart_policy: unless-stopped
 
     - name: Start Backend container
       docker_container:
         name: backend
         image: asingh2112/task-manager-backend:latest
         state: started
+        restart_policy: unless-stopped
         ports:
           - "9090:8080"
-        restart_policy: unless-stopped
 
     - name: Start Frontend container
       docker_container:
         name: frontend
         image: asingh2112/task-manager-frontend:latest
         state: started
+        restart_policy: unless-stopped
         ports:
           - "3000:80"
-        restart_policy: unless-stopped
