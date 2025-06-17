@@ -32,7 +32,7 @@ pipeline {
 
         stage('Push to DockerHub') {
             steps {
-                withDockerRegistry('','dockerhub') {
+                docker.withRegistry('','dockerhub') {
                     sh "docker tag $BACKEND_IMAGE $DOCKER_HUB_USER/$BACKEND_IMAGE:latest"
                     sh "docker tag $FRONTEND_IMAGE $DOCKER_HUB_USER/$FRONTEND_IMAGE:latest"
                     sh "docker push $DOCKER_HUB_USER/$BACKEND_IMAGE:latest"
