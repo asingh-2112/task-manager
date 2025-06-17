@@ -26,7 +26,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 sh 'docker build -t $BACKEND_IMAGE ./task-manager-backend'
-                sh 'docker build -t $FRONTEND_IMAGE ./frontend'
+                sh 'docker build -t $FRONTEND_IMAGE ./task-manager-frontend'
             }
         }
 
