@@ -9,17 +9,17 @@
         state: started
       ignore_errors: true  # in case service module fails on some OSes
 
-    - name: Start MySQL container
-      docker_container:
-        name: mysql
-        image: mysql:8
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: taskdb
-        state: started
-        restart_policy: unless-stopped
-        ports:
-          - "3306:3306"
+    # - name: Start MySQL container
+    #   docker_container:
+    #     name: mysql
+    #     image: mysql:8
+    #     env:
+    #       MYSQL_ROOT_PASSWORD: root
+    #       MYSQL_DATABASE: taskdb
+    #     state: started
+    #     restart_policy: unless-stopped
+    #     ports:
+    #       - "3306:3306"
 
     - name: Start Backend container
       docker_container:
