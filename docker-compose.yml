@@ -21,7 +21,7 @@ services:
     networks:
       - app-network
     environment:
-      - VITE_REACT_APP_API_URL=http://backend:8888/api
+      - VITE_REACT_APP_API_URL=http://localhost:8888/api
 
 
 networks:
