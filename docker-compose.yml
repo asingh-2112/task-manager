@@ -11,7 +11,7 @@ services:
       - app-network
 
   frontend:
-    image: asingh2112/react-frontend:latest
+    image: asingh2112/task-manager-frontend:latest
     container_name: frontend
     restart: unless-stopped
     ports:
