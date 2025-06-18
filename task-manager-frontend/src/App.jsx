@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const BASE_API = `${import.meta.env.REACT_APP_API_URL}/tasks`
+const BASE_API = `${import.meta.env.VITE_REACT_APP_API_URL}/tasks`
 
 export default function App() {
   const [tasks, setTasks] = useState([])
