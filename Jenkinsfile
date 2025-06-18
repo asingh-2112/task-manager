@@ -31,7 +31,7 @@ pipeline {
         }
 
         stage('Push to DockerHub') {
-    steps {
+        steps {
         script {
             docker.withRegistry('', CREDENTIALS_ID) {
                 sh "docker tag $BACKEND_IMAGE $DOCKER_HUB_USER/$BACKEND_IMAGE:latest"
@@ -44,10 +44,18 @@ pipeline {
 }
 
 
-        stage('Deploy with Ansible') {
-            steps {
-                sh 'ansible-playbook -i ansible/hosts ansible/deploy.yml'
-            }
+        stage('Deploy to Kubernetes') {
+    steps {
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
+            sh '''
+              export KUBECONFIG=$KUBECONFIG_FILE
+              kubectl apply -f k8s/namespace.yaml
+              kubectl apply -f k8s/backend/
+              kubectl apply -f k8s/frontend/
+            '''
         }
+    }
+}
+
     }
 }
