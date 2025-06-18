@@ -2,16 +2,15 @@ version: '3.8'
 
 services:
   backend:
-    image: asingh2112/task-manager-backend:${TAG:-latest}
+    image: asingh2112/task-manager-backend:latest
     container_name: backend
     restart: unless-stopped
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/taskdb
+    - SPRING_DATASOURCE_USERNAME=root
+    - SPRING_DATASOURCE_PASSWORD=Root@123
     ports:
       - "9090:9090"
-    depends_on:
-      mysql:
-        condition: service_healthy
     networks:
       - app-network
     healthcheck:
@@ -21,7 +20,7 @@ services:
       retries: 5
 
   frontend:
-    image: asingh2112/react-frontend:${TAG:-latest}
+    image: asingh2112/react-frontend:latest
     container_name: frontend
     restart: unless-stopped
     ports:
@@ -30,16 +29,18 @@ services:
       - backend
     networks:
       - app-network
+    environment:
+      - REACT_APP_API_URL=http://backend:9090/api
 
   mysql:
     image: mysql:8.4
     container_name: mysql
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=Root@123
-      - MYSQL_DATABASE=taskdb
-      - MYSQL_ROOT_HOST=%
-      - MYSQL_DEFAULT_AUTHENTICATION_PLUGIN=mysql_native_password
+    - MYSQL_ROOT_PASSWORD=Root@123
+    - MYSQL_DATABASE=taskdb
+    - MYSQL_USER=root
+    - MYSQL_PASSWORD=Root@123
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -50,9 +51,8 @@ services:
       timeout: 10s
       retries: 30
 
-olumes:
-  mysql-data:
-    driver: local
+volumes:
+  mysql-data: local
 
 networks:
   app-network:
