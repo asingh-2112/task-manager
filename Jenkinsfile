@@ -46,13 +46,24 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
     steps {
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-            sh '''
-              export KUBECONFIG=$KUBECONFIG_FILE
-              kubectl apply -f k8s/namespace.yaml
-              kubectl apply -f k8s/backend/
-              kubectl apply -f k8s/frontend/
-            '''
+        script {
+            // Method 1: Using withCredentials (recommended)
+            withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                sh '''
+                mkdir -p ~/.kube
+                cp $KUBECONFIG ~/.kube/config
+                chmod 600 ~/.kube/config
+                
+                # Verify kubectl access
+                kubectl cluster-info
+                
+                # Deploy your application
+                kubectl apply -f k8s/
+                '''
+            }
+            
+            // OR Method 2: Using environment variable (alternative)
+            // sh "KUBECONFIG=${env.KUBECONFIG} kubectl apply -f k8s/"
         }
     }
 }
