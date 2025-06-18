@@ -28,7 +28,7 @@
         state: started
         restart_policy: unless-stopped
         ports:
-          - "9090:8080"
+          - "8888:8888"
 
     - name: Start Frontend container
       docker_container:
