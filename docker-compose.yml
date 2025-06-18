@@ -50,8 +50,9 @@ services:
       timeout: 10s
       retries: 30
 
-volumes:
+olumes:
   mysql-data:
+    driver: local
 
 networks:
   app-network:
