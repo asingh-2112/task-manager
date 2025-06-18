@@ -2,6 +2,9 @@
     FROM node:20-alpine as build
     WORKDIR /app
     COPY . .
+
+    # Add this line to set the correct API URL before build
+    ENV REACT_APP_API_URL=http://backend:8888
     RUN npm install && npm run build
     
     # --- Stage 2: Serve with nginx ---
