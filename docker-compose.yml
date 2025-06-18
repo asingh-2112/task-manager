@@ -6,7 +6,7 @@ services:
     container_name: backend
     restart: unless-stopped
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/yourdb?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/taskdb?useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Root@123
     ports:
