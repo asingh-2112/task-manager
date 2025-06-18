@@ -44,26 +44,16 @@ pipeline {
 }
 
 
-        stage('Deploy to Kubernetes') {
+        stage('Kubernetes Deploy') {
     steps {
-        script {
-            // Method 1: Using withCredentials (recommended)
-            withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                sh '''
-                mkdir -p ~/.kube
-                cp $KUBECONFIG ~/.kube/config
-                chmod 600 ~/.kube/config
-                
-                # Verify kubectl access
-                kubectl cluster-info
-                
-                # Deploy your application
-                kubectl apply -f k8s/
-                '''
-            }
-            
-            // OR Method 2: Using environment variable (alternative)
-            // sh "KUBECONFIG=${env.KUBECONFIG} kubectl apply -f k8s/"
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            sh '''
+            mkdir -p ~/.kube
+            tar -xzvf $KUBECONFIG -C ~/.kube
+            mv ~/.kube/config ~/.kube/config.orig
+            sed 's|/home/abhishek-kumar/.minikube|~/.kube|g' ~/.kube/config.orig > ~/.kube/config
+            kubectl get nodes
+            '''
         }
     }
 }
