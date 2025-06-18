@@ -1,6 +1,7 @@
 package com.taskmanager.controller;
+
 import com.taskmanager.model.Task;
-import com.taskmanager.repository.TaskRepository;
+import com.taskmanager.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,17 +10,31 @@ import java.util.List;
 @RequestMapping("/api/tasks")
 @CrossOrigin(origins = "*")
 public class TaskController {
-    private final TaskRepository repo;
 
-    public TaskController(TaskRepository repo) { this.repo = repo; }
+    private final TaskService service;
 
-    @GetMapping public List<Task> getAll() { return repo.findAll(); }
-    @PostMapping public Task add(@RequestBody Task t) {
-        return repo.save(new Task(t.getDescription()));
+    public TaskController(TaskService service) {
+        this.service = service;
     }
-    @PutMapping("/{id}") public Task toggle(@PathVariable Long id) {
-        Task t = repo.findById(id).orElseThrow();
-        t.setCompleted(!t.isCompleted());
-        return repo.save(t);
+
+    @GetMapping
+    public List<Task> getAll() {
+        return service.getAllTasks();
+    }
+
+    @PostMapping
+    public Task add(@RequestBody Task t) {
+        return service.addTask(t.getDescription());
+    }
+
+    @PutMapping("/{id}")
+    public Task toggle(@PathVariable Long id) {
+        return service.toggleTask(id);
+    }
+
+    // ✅ New endpoint to extract all tasks
+    @GetMapping("/extract")
+    public List<Task> extractAll() {
+        return service.extractAllTasks();
     }
 }

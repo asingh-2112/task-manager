@@ -5,19 +5,10 @@ services:
     image: asingh2112/task-manager-backend:latest
     container_name: backend
     restart: unless-stopped
-    environment:
-    - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/taskdb
-    - SPRING_DATASOURCE_USERNAME=root
-    - SPRING_DATASOURCE_PASSWORD=Root@123
     ports:
-      - "9090:9090"
+      - "8888:8888"
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   frontend:
     image: asingh2112/react-frontend:latest
@@ -30,29 +21,8 @@ services:
     networks:
       - app-network
     environment:
-      - REACT_APP_API_URL=http://backend:9090/api
+      - REACT_APP_API_URL=http://backend:8888/api/tasks
 
-  mysql:
-    image: mysql:8.4
-    container_name: mysql
-    restart: unless-stopped
-    environment:
-    - MYSQL_ROOT_PASSWORD=Root@123
-    - MYSQL_DATABASE=taskdb
-    - MYSQL_USER=root
-    - MYSQL_PASSWORD=Root@123
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pRoot@123"]
-      interval: 5s
-      timeout: 10s
-      retries: 30
-
-volumes:
-  mysql-data: local
 
 networks:
   app-network:
