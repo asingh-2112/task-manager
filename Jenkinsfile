@@ -45,15 +45,15 @@ pipeline {
 
 
         stage('Kubernetes Deploy') {
-    steps {
-        withCredentials([file(credentialsId: 'jenkins-kubeconfig', variable: 'KUBECONFIG')]) {
-    sh '''
-        mkdir -p /var/lib/jenkins/.kube
-        cp $KUBECONFIG /var/lib/jenkins/.kube/config
-        kubectl get nodes
-    '''
-}
-    }
+        steps {
+            withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                sh '''
+                    mkdir -p /var/lib/jenkins/.kube
+                    cp $KUBECONFIG /var/lib/jenkins/.kube/config
+                    kubectl get nodes
+                '''
+            }
+        }
 }
 
     }
